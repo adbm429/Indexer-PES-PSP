@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PES PPSSPP REVOLUTION — PNG / BMP</title>
+<style>
+:root{color-scheme:dark;--bg:#10141c;--panel:#191f2b;--panel2:#202838;--line:#303b4f;--text:#edf2fa;--muted:#aab6c8;--accent:#76d5b2;--accent2:#4eb997}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{padding:22px 18px 18px;background:linear-gradient(135deg,#1a2b36,#182033);border-bottom:1px solid var(--line)}
+header h1{font-size:clamp(22px,4vw,32px);margin:0 0 5px}header p{margin:0;color:var(--muted);max-width:900px}
+main{max-width:1200px;margin:auto;padding:16px;display:grid;gap:14px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:15px;min-width:0}
+h2{font-size:17px;margin:0 0 12px}.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+label{display:block;color:var(--muted);font-size:13px;margin-bottom:5px}input,select,button{font:inherit}input[type=file],select,input[type=number],input[type=range]{width:100%}select,input[type=number]{background:#101722;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:9px}input[type=range]{accent-color:var(--accent)}
+input[type=checkbox]{accent-color:var(--accent);margin-right:7px}button{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:9px;padding:10px 13px;cursor:pointer;font-weight:650}button.primary{background:var(--accent);color:#08221a;border-color:var(--accent)}button:disabled{opacity:.45;cursor:not-allowed}.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:13px}
+.previews{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.preview{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0b0e13}.preview .top{padding:8px 10px;background:#202838;display:flex;justify-content:space-between;gap:8px;font-size:13px}.canvaswrap{height:300px;display:grid;place-items:center;padding:10px;background-color:#10141c;background-image:linear-gradient(45deg,#202633 25%,transparent 25%),linear-gradient(-45deg,#202633 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#202633 75%),linear-gradient(-45deg,transparent 75%,#202633 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0}.canvaswrap canvas{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;image-rendering:auto}
+.small{font-size:12px;color:var(--muted)}.notice{padding:10px 12px;border-radius:9px;background:#202838;color:var(--muted);margin-top:12px}.status{font-size:13px;color:var(--accent);min-height:20px;margin-top:8px}.checkline{display:flex;align-items:center;margin-top:8px;color:var(--muted);font-size:13px}.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.pill{padding:5px 9px;background:#202838;border:1px solid var(--line);border-radius:20px;font-size:12px;color:var(--muted)}
+footer{max-width:1200px;margin:auto;padding:0 16px 25px;color:var(--muted);font-size:12px}
+@media(max-width:650px){.previews{grid-template-columns:1fr}.canvaswrap{height:240px}main{padding:10px}.panel{padding:12px}}
+
+.guideChoices{display:flex;flex-wrap:wrap;gap:6px}
+.guideChoices button{padding:7px 9px;font-size:12px}
+.guideChoices button.active{background:var(--accent);color:#08221a;border-color:var(--accent)}
+details{border-top:1px solid var(--line);padding:10px 0}
+details:first-of-type{border-top:0}
+summary{cursor:pointer;font-weight:700}
+
+.choiceHelp{display:block;margin-top:7px;padding:9px 10px;border-left:3px solid var(--accent);background:#121c29;color:var(--muted);border-radius:5px;font-size:12px;line-height:1.5}
+.choiceHelp strong{color:var(--text)}
+
+:root{--bg:#080b12;--panel:#111827;--panel2:#1a2638;--line:#29364b;--text:#f4f7fb;--muted:#a9b7cc;--accent:#5eead4;--accent2:#22c7aa}
+body{background:radial-gradient(ellipse at 15% -10%,rgba(41,91,124,.32),transparent 42%),radial-gradient(ellipse at 100% 15%,rgba(24,129,112,.16),transparent 35%),var(--bg)}
+header{position:relative;overflow:hidden;padding:30px 22px 28px;background:linear-gradient(115deg,rgba(13,25,42,.98),rgba(15,35,48,.94) 58%,rgba(12,21,35,.98));border-bottom:1px solid #2a4255}
+header:after{content:"";position:absolute;right:-35px;top:-45px;width:300px;height:100%;background-image:url('joker.jpg');background-size:contain;background-position:center;background-repeat:no-repeat;opacity:.10;pointer-events:none;filter:grayscale(1)}
+.hero{max-width:1200px;margin:auto;position:relative;z-index:1;display:flex;align-items:center;gap:22px}
+.heroMark{width:92px;height:92px;object-fit:contain;border-radius:18px;background:#05070b;padding:8px;border:1px solid #26364a;box-shadow:0 10px 35px #0008}
+.heroCopy{min-width:0}.eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:800;margin-bottom:5px}
+header h1{font-size:clamp(25px,4vw,39px);letter-spacing:.035em;margin:0 0 5px;font-weight:850}header p{max-width:760px}
+.creator{display:inline-flex;align-items:center;gap:7px;margin-top:12px;padding:6px 11px;border:1px solid #355367;background:#0b1824;border-radius:999px;font-size:12px;color:#dce8f6}
+.creator b{color:var(--accent);letter-spacing:.06em}
+main{max-width:1240px;padding:22px 16px 28px;gap:17px}
+.panel{background:linear-gradient(145deg,rgba(19,29,45,.98),rgba(14,21,33,.98));border:1px solid #2a374b;border-radius:17px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.12)}
+.panel h2{display:flex;align-items:center;gap:10px;font-size:17px;letter-spacing:.01em}
+.panel h2:before{content:"";width:4px;height:19px;border-radius:4px;background:var(--accent);display:inline-block}
+select,input[type=number],input[type=file]{background:#0b111c;border-color:#334258}
+button{transition:transform .15s ease,border-color .15s ease,background .15s ease}
+button:hover:not(:disabled){transform:translateY(-1px);border-color:var(--accent)}
+button.primary{background:linear-gradient(135deg,#5eead4,#36cdb5);box-shadow:0 5px 18px #22c7aa24}
+.preview{border-color:#2d3c52;box-shadow:0 7px 18px #0002}
+.preview .top{background:#182437}
+.notice{border:1px solid #2d4056;background:#101e2d}
+.choiceHelp{background:#0c1724;border-left-color:var(--accent)}
+.brandFooter{max-width:1200px;margin:0 auto 26px;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:18px;border:1px solid #26374a;border-radius:16px;background:linear-gradient(110deg,#0e1623,#0b111b)}
+.brandFooter .brandText{font-size:12px;color:var(--muted)}.brandFooter strong{display:block;color:#f5f7fb;font-size:14px;letter-spacing:.12em}.brandFooter img{width:180px;max-width:42%;height:auto;object-fit:contain;opacity:.82}
+@media(max-width:650px){header{padding:22px 14px}.hero{gap:13px;align-items:flex-start}.heroMark{width:66px;height:66px;border-radius:13px;padding:5px}header:after{width:190px;opacity:.07}.brandFooter{margin:0 10px 18px}.brandFooter img{width:125px}.panel{padding:14px}}
+
+</style>
+</head>
+<body>
+<header>
+<div class="hero">
+<img class="heroMark" src="joker.jpg" alt="Logo Joker">
+<div class="heroCopy">
+<div class="eyebrow">Football Texture Toolkit</div>
+<h1>PES PPSSPP REVOLUTION</h1>
+<p>Alat pemrosesan tekstur untuk resize, reduce color, indexed PNG, dithering, grayscale, bitmap 1-bit, dan BMP. Semua proses berjalan secara lokal di browser.</p>
+<div class="creator"><span>CREATOR:</span> <b>Arfie DBM</b></div>
+</div>
+</div>
+</header>
+<main>
+<section class="panel">
+<h2>1. Buka gambar</h2>
+<div class="controls">
+<div><label for="file">Pilih gambar (PNG, JPG, WebP, BMP yang didukung browser)</label><input id="file" type="file" accept="image/*"></div>
+<div><label for="maxdim">Mode ukuran gambar</label><select id="maxdim"><option value="0">Pertahankan ukuran asli</option><option value="2048">Maks. 2048 px sisi terpanjang</option><option value="1024">Maks. 1024 px sisi terpanjang</option><option value="512">Maks. 512 px sisi terpanjang</option><option value="custom" selected>Ukuran khusus</option></select>
+<small class="choiceHelp" id="help-maxdim" aria-live="polite"></small></div>
+<div><label for="targetWidth">Lebar hasil (px)</label><input id="targetWidth" type="number" min="1" max="8192" value="512"></div>
+<div><label for="targetHeight">Tinggi hasil (px)</label><input id="targetHeight" type="number" min="1" max="8192" value="512"></div>
+<div><label for="resizeMode">Cara mengubah ukuran</label><select id="resizeMode"><option value="exact" selected>Ukuran tepat (lebar × tinggi)</option><option value="fit">Pertahankan rasio aspek, muat dalam ukuran target</option></select>
+<small class="choiceHelp" id="help-resizeMode" aria-live="polite"></small></div>
+</div>
+<div class="small" id="fileInfo">Belum ada gambar.</div>
+<div class="notice">Resolusi target diterapkan pada hasil pemrosesan dan seluruh file ekspor. Contoh 1280 × 1280 menjadi 512 × 512: pilih “Ukuran khusus”, isi lebar 512 dan tinggi 512, lalu tekan Proses / Indexing. Tips untuk grafis menu: gunakan 256 warna. Jika gradasi terlihat berjalur, coba “Floyd–Steinberg ringan (gradasi)” terlebih dahulu; mode ini menyebarkan sebagian kecil kesalahan warna untuk mengurangi banding tanpa menimbulkan terlalu banyak bintik.</div>
+</section>
+
+<section class="panel">
+<h2>2. Pengaturan Reduce Color / Bitmap</h2>
+<div class="controls">
+<div><label for="mode">Mode warna</label><select id="mode"><option value="indexed">Indexed color (palet)</option><option value="grayscale">Grayscale</option><option value="bitmap">Bitmap hitam-putih 1-bit</option></select>
+<small class="choiceHelp" id="help-mode" aria-live="polite"></small></div>
+<div><label for="colors">Jumlah warna</label><select id="colors"><option>2</option><option>4</option><option>8</option><option>16</option><option>32</option><option>64</option><option>128</option><option selected>256</option></select>
+<small class="choiceHelp" id="help-colors" aria-live="polite"></small></div>
+<div><label for="dither">Dithering</label><select id="dither"><option value="none" selected>Tanpa dithering</option><option value="fs-light">Floyd–Steinberg ringan (gradasi)</option><option value="ordered">Ordered 4×4 halus</option><option value="fs">Floyd–Steinberg penuh</option></select>
+<small class="choiceHelp" id="help-dither" aria-live="polite"></small></div>
+<div><label for="alpha">Penanganan transparansi</label><select id="alpha"><option value="preserve" selected>Pertahankan transparansi</option><option value="threshold">Transparan jika alpha di bawah ambang</option><option value="white">Gabungkan ke latar putih</option><option value="black">Gabungkan ke latar hitam</option></select>
+<small class="choiceHelp" id="help-alpha" aria-live="polite"></small></div>
+<div><label for="threshold">Ambang bitmap / alpha: <span id="thresholdVal">128</span></label><input id="threshold" type="range" min="1" max="254" value="128"></div>
+<div><label for="algorithm">Algoritma palet</label><select id="algorithm"><option value="median" selected>Median Cut berbobot + penyempurnaan palet</option><option value="popular">Warna paling sering muncul</option><option value="logo4">Logo/tulisan kecil (prioritas tepi)</option></select>
+<small class="choiceHelp" id="help-algorithm" aria-live="polite"></small></div>
+</div>
+<div class="checkline"><input type="checkbox" id="reserveTransparent" checked><span>Sediakan satu slot transparan pada palet indexed PNG</span></div>
+<div class="checkline"><input type="checkbox" id="nearest" checked><span>Pertahankan ukuran asli; jangan memperbesar pratinjau gambar</span></div>
+<div class="actions"><button class="primary" id="process" disabled>Proses / Indexing</button><button id="reset" disabled>Reset pengaturan</button></div>
+<div class="status" id="status" aria-live="polite"></div>
+<div class="stats" id="stats"></div>
+</section>
+
+<section class="panel">
+<h2>3. Bandingkan hasil</h2>
+<div class="previews">
+<div class="preview"><div class="top"><span>Gambar asli</span><span id="originalDim">—</span></div><div class="canvaswrap"><canvas id="originalCanvas"></canvas></div></div>
+<div class="preview"><div class="top"><span>Hasil reduce color</span><span id="resultDim">—</span></div><div class="canvaswrap"><canvas id="resultCanvas"></canvas></div></div>
+</div>
+<div class="actions"><button id="downloadPng" disabled>Ekspor Indexed PNG</button><button id="downloadBmp" disabled>Ekspor BMP 8-bit</button><button id="downloadBmp4" disabled>Ekspor BMP 4-bit (16 warna)</button><button id="downloadBmp1" disabled>Ekspor Bitmap BMP 1-bit</button><button id="downloadPreview" disabled>Ekspor PNG kompatibel</button></div>
+<div class="notice"><strong>Catatan penting:</strong> “Indexed PNG” disimpan sebagai PNG berpalet sungguhan (PLTE/tRNS) bila browser mendukung kompresi yang diperlukan. “PNG kompatibel” adalah PNG RGBA biasa yang warnanya sudah dikurangi. BMP 8-bit, BMP 4-bit (16 warna), dan BMP 1-bit diekspor sebagai bitmap berpalet. BMP 4-bit standar tidak menyimpan transparansi alpha; area transparan akan memakai indeks warna 0.</div>
+</section>
+<section class="panel">
+<h2>Catatan penggunaan untuk PES</h2>
+<ul class="small">
+<li>PNG berpalet bukan berarti otomatis cocok untuk setiap format tekstur game. Alat modding PES mungkin meminta format internal tertentu.</li>
+<li>Resolusi ekspor mengikuti dimensi hasil pemrosesan yang ditampilkan pada pratinjau. Untuk 1280 × 1280 menjadi 512 × 512, pilih “Ukuran khusus” dan isi 512 pada lebar serta tinggi.</li><li>Jangan mengubah ukuran gambar jika game mensyaratkan dimensi tekstur tertentu.</li>
+<li>Untuk tekstur dengan alpha halus, mode transparansi ambang dapat mengubah pinggiran semi-transparan. Uji hasilnya di game.</li>
+<li>Untuk tulisan kecil, pilih algoritma “Logo/tulisan kecil (prioritas tepi)”, jumlah warna 16, lalu proses dan ekspor BMP 4-bit. Algoritma memberi bobot lebih tinggi pada piksel berkontras tinggi agar warna garis dan huruf lebih terwakili.</li><li>BMP 4-bit standar tidak mendukung alpha seperti PNG. Jika tekstur perlu transparansi, pastikan alat PES menerima format transparansi lain atau gunakan latar/warna indeks yang memang diharapkan game.</li><li>Palet berbobot dapat mengurangi kerusakan, tetapi 16 warna tetap membatasi detail dan tidak menjamin hasil identik dengan OptPiX/Photoshop.</li>
+</ul>
+</section>
+
+<section class="panel" id="textureGuide">
+<h2>6. Panduan Texture Indexing PES 2014</h2>
+<p class="small">Pilih salah satu opsi untuk membaca penjelasannya. Bagian ini melengkapi alat indexing di atas; pilihan panduan tidak mengubah gambar sampai Anda mengatur opsi di bagian pemrosesan dan menekan <b>Proses / Indexing</b>.</p>
+<div class="controls">
+ <div>
+  <label>Resolusi tekstur</label>
+  <div class="guideChoices" id="guideSizes">
+   <button type="button" data-size="32">32×32</button><button type="button" data-size="64">64×64</button><button type="button" data-size="128">128×128</button><button type="button" data-size="256">256×256</button><button type="button" data-size="512">512×512</button><button type="button" data-size="1024">1024×1024</button><button type="button" data-size="2048">2048×2048</button>
+  </div>
+ </div>
+ <div>
+  <label>Bitmap / BPP</label>
+  <div class="guideChoices" id="guideBpp">
+   <button type="button" data-bpp="4">4 bpp</button><button type="button" data-bpp="8">8 bpp</button><button type="button" data-bpp="16">16 bpp</button><button type="button" data-bpp="24">24 bpp</button><button type="button" data-bpp="32">32 bpp</button>
+  </div>
+ </div>
+ <div>
+  <label>Reduce Colours</label>
+  <div class="guideChoices" id="guideColors">
+   <button type="button" data-colors="16">16</button><button type="button" data-colors="32">32</button><button type="button" data-colors="64">64</button><button type="button" data-colors="128">128</button><button type="button" data-colors="256">256</button>
+  </div>
+ </div>
+ <div>
+  <label>Dithering</label>
+  <div class="guideChoices" id="guideDither">
+   <button type="button" data-dither="none">Off</button><button type="button" data-dither="fs-light">Floyd–Steinberg ringan</button><button type="button" data-dither="ordered">Ordered</button><button type="button" data-dither="fs">Floyd–Steinberg penuh</button>
+  </div>
+ </div>
+</div>
+<div class="notice" id="guideOutput" aria-live="polite"><b>Resolusi 32×32.</b> Cocok untuk ikon sangat kecil atau slot UI sederhana. Logo detail mudah kehilangan garis dan huruf pada ukuran ini. Gunakan ukuran asli slot tekstur sebagai acuan.</div>
+<div class="notice"><b>Catatan untuk pemilihan BPP:</b> 4 bpp biasanya berarti palet maksimal 16 warna; 8 bpp biasanya berarti palet maksimal 256 warna. 16/24/32 bpp umumnya berarti warna langsung (misalnya RGB/RGBA atau format GPU), bukan jumlah warna palet. Arti tepatnya bergantung pada format tekstur.</div>
+</section>
+<section class="panel" id="textureHowTo">
+<h2>7. Panduan penggunaan untuk pemula</h2>
+<details open><summary>Langkah dasar indexing gambar</summary>
+<ol>
+<li>Cadangkan gambar/tekstur asli sebelum mengedit.</li>
+<li>Muat gambar pada bagian <b>1. Buka gambar</b>.</li>
+<li>Atur lebar dan tinggi. Jika mengganti tekstur yang sudah ada, mulai dari dimensi sumber yang sama. Ukuran 32×32, 64×64, 128×128, dan seterusnya hanya boleh dipakai jika slot game mendukungnya.</li>
+<li>Pilih <b>Indexed color (palet)</b>, jumlah warna, algoritma palet, dan dithering.</li>
+<li>Untuk logo dengan warna datar dan garis tegas, mulai dengan <b>16 warna</b>, algoritma <b>Logo/tulisan kecil (prioritas tepi)</b>, dan <b>Tanpa dithering</b> jika target benar-benar memakai palet 4-bit.</li>
+<li>Tekan <b>Proses / Indexing</b>, periksa pratinjau, lalu ekspor format yang diperlukan.</li>
+<li>Masukkan hasil menggunakan tool ekstraksi/repacking yang sesuai format tekstur game. Uji satu aset terlebih dahulu.</li>
+</ol></details>
+<details><summary>Apa itu indexing dan Reduce Colours?</summary>
+<p><b>Indexed colour</b> menyimpan nomor indeks pada tiap piksel yang menunjuk ke daftar warna (palet). <b>Reduce Colours</b> mengurangi jumlah warna sumber menjadi jumlah target, misalnya dari jutaan warna menjadi 16 atau 256. Semakin sedikit warna, semakin besar risiko gradasi dan detail hilang.</p></details>
+<details><summary>Apa itu dithering?</summary>
+<p>Dithering memakai pola atau menyebarkan selisih warna ke piksel sekitar agar gradasi yang terbatas terlihat lebih halus. Ia tidak mengembalikan detail yang hilang.</p>
+<ul>
+<li><b>Tanpa dithering (Off):</b> pilihan awal yang baik untuk logo, lambang, teks, dan ikon dengan tepi tegas.</li>
+<li><b>Floyd–Steinberg ringan:</b> menyebarkan sebagian kecil selisih warna; dapat membantu gradasi tanpa terlalu banyak bintik.</li>
+<li><b>Ordered:</b> membuat pola teratur. Pola dapat terlihat pada tekstur kecil.</li>
+<li><b>Floyd–Steinberg penuh:</b> bisa membantu foto/gradasi, tetapi logo kecil bisa tampak berbintik.</li>
+</ul></details>
+<details><summary>Mengapa logo 32×32, 4 bpp, 16 warna bisa rusak atau tidak terlihat?</summary>
+<p>4 bpp biasanya hanya menampung 16 indeks warna, jadi kombinasi 4 bpp dan 16 warna secara prinsip masuk akal. Namun itu tidak menjamin kompatibilitas dengan game. Penyebabnya bisa berupa palet atau indeks transparansi yang salah, alpha hilang, format tekstur internal tidak cocok, urutan piksel swizzled/tiled, metadata/mipmap yang hilang, atau proses repacking yang keliru.</p>
+<p>Jika gambar terlihat burik, penyebabnya juga bisa karena resolusi terlalu kecil atau jumlah warna terlalu sedikit. Jika gambar benar-benar hilang atau berubah drastis, periksa format, transparansi, palet, dan proses repacking terlebih dahulu.</p></details>
+<details><summary>Alur pengujian yang aman</summary>
+<ol>
+<li>Catat ukuran, format, dan tampilan tekstur asli.</li>
+<li>Ubah satu pengaturan saja pada setiap pengujian.</li>
+<li>Periksa transparansi pada latar terang dan gelap.</li>
+<li>Pastikan hasil ekspor sesuai dengan yang diminta tool modding.</li>
+<li>Jangan menganggap PNG/BMP berpalet otomatis sama dengan format tekstur internal PES.</li>
+<li>Simpan cadangan agar dapat kembali ke file asli.</li>
+</ol></details>
+<div class="notice"><b>Batasan penting:</b> HTML ini dapat mengolah gambar dan mengekspor PNG indexed/BMP, tetapi tidak otomatis membuat format tekstur internal PES 2014 atau memperbaiki data CPK/arsip game. Format target bergantung pada platform dan tool yang digunakan.</div>
+</section>
+
+</main>
+<section class="brandFooter" aria-label="Kredit pembuat">
+<div class="brandText"><strong>DESIGNED BY ARFIE DBM</strong>Joker Edition · PES PPSSPP REVOLUTION</div>
+<img src="joker.jpg" alt="Ilustrasi Joker">
+</section>
+<footer>Berjalan di perangkat Anda. Untuk gambar yang sangat besar, proses bisa memerlukan memori cukup besar; gunakan batas dimensi jika browser menutup tab.</footer>
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const fileInput=$('file'), orig=$('originalCanvas'), out=$('resultCanvas');
+const octx=orig.getContext('2d',{willReadFrequently:true}), rctx=out.getContext('2d',{willReadFrequently:true});
+let sourceImage=null, sourceName='texture', originalData=null, processed=null, palette=[], indexedPixels=null, alphaPixels=null, width=0,height=0, sourceWidth=0, sourceHeight=0;
+$('threshold').addEventListener('input',()=> $('thresholdVal').textContent=$('threshold').value);
+$('mode').addEventListener('change',()=>{$('colors').disabled=$('mode').value!=='indexed';$('algorithm').disabled=$('mode').value!=='indexed';});
+fileInput.addEventListener('change', async e=>{
+ const f=e.target.files&&e.target.files[0]; if(!f)return;
+ try{
+  sourceName=(f.name||'texture').replace(/\.[^.]+$/,'')||'texture';
+  const url=URL.createObjectURL(f); const img=new Image();
+  img.onload=()=>{
+   sourceImage=img; sourceWidth=img.naturalWidth; sourceHeight=img.naturalHeight;
+   if(!$('targetWidth').dataset.userEdited) $('targetWidth').value=sourceWidth;
+   if(!$('targetHeight').dataset.userEdited) $('targetHeight').value=sourceHeight;
+   applyResize();
+   $('process').disabled=false;$('reset').disabled=false;
+   $('status').textContent='Gambar siap. Pilih ukuran target, lalu tekan Proses / Indexing.';
+   URL.revokeObjectURL(url);
+  };
+  img.onerror=()=>{URL.revokeObjectURL(url);$('status').textContent='Gagal membuka gambar ini.';};
+  img.src=url;
+ }catch(err){$('status').textContent='Gagal membuka gambar: '+err.message;}
+});
+function applyResize(){
+ if(!sourceImage)return;
+ let w=sourceWidth,h=sourceHeight;
+ const mode=$('maxdim').value;
+ if(mode==='custom'){
+   const tw=Math.max(1,Math.min(8192,parseInt($('targetWidth').value,10)||sourceWidth));
+   const th=Math.max(1,Math.min(8192,parseInt($('targetHeight').value,10)||sourceHeight));
+   if($('resizeMode').value==='fit'){
+     const scale=Math.min(tw/sourceWidth,th/sourceHeight);
+     w=Math.max(1,Math.round(sourceWidth*scale));h=Math.max(1,Math.round(sourceHeight*scale));
+   } else { w=tw;h=th; }
+ } else {
+   const lim=+mode;
+   if(lim&&Math.max(w,h)>lim){const scale=lim/Math.max(w,h);w=Math.max(1,Math.round(w*scale));h=Math.max(1,Math.round(h*scale));}
+ }
+ width=w;height=h;orig.width=out.width=w;orig.height=out.height=h;
+ octx.clearRect(0,0,w,h);octx.imageSmoothingEnabled=true;octx.imageSmoothingQuality='high';octx.drawImage(sourceImage,0,0,w,h);
+ originalData=octx.getImageData(0,0,w,h);rctx.clearRect(0,0,w,h);
+ processed=null;palette=[];indexedPixels=null;alphaPixels=null;
+ $('fileInfo').textContent=`${sourceName} — asli ${sourceWidth} × ${sourceHeight}; hasil target ${w} × ${h}`;
+ $('originalDim').textContent=`${w} × ${h}`;$('resultDim').textContent='Belum diproses';
+ $('stats').innerHTML='';
+ ['downloadPng','downloadBmp','downloadBmp4','downloadBmp1','downloadPreview'].forEach(id=>$(id).disabled=true);
+ $('status').textContent=`Resolusi pemrosesan: ${w} × ${h}. Tekan Proses / Indexing untuk menerapkan.`;
+}
+$('maxdim').addEventListener('change',()=>{if(sourceImage)applyResize();});
+['targetWidth','targetHeight','resizeMode'].forEach(id=>$(id).addEventListener('change',()=>{
+ if(id==='targetWidth'||id==='targetHeight')$(id).dataset.userEdited='1';
+ if($('maxdim').value==='custom'&&sourceImage)applyResize();
+}));
+['targetWidth','targetHeight'].forEach(id=>$(id).addEventListener('input',()=>{if($('maxdim').value==='custom'&&sourceImage)applyResize();}));
+$('reset').addEventListener('click',()=>{
+ $('mode').value='indexed';$('colors').value='256';$('dither').value='none';$('alpha').value='preserve';$('threshold').value=128;$('thresholdVal').textContent='128';$('algorithm').value='median';$('reserveTransparent').checked=true;$('mode').dispatchEvent(new Event('change'));
+ $('maxdim').value='custom';$('resizeMode').value='exact';
+ if(sourceImage){$('targetWidth').value=sourceWidth;$('targetHeight').value=sourceHeight;$('targetWidth').dataset.userEdited='';$('targetHeight').dataset.userEdited='';applyResize();}
+ $('status').textContent='Pengaturan dikembalikan ke default.';
+});
+function rgbToLabish(r,g,b){return [r,g,b]}
+function medianCut(colors,limit){
+ // Weighted median cut: histogram counts affect splitting and representative colors.
+ let boxes=[colors];
+ const ranges=box=>{const mins=[255,255,255],maxs=[0,0,0];for(const c of box)for(let k=0;k<3;k++){mins[k]=Math.min(mins[k],c[k]);maxs[k]=Math.max(maxs[k],c[k]);}return maxs.map((v,k)=>v-mins[k]);};
+ while(boxes.length<limit){
+  let bi=-1,bscore=-1,bchannel=0;
+  for(let i=0;i<boxes.length;i++){const box=boxes[i];if(box.length<2)continue;const rg=ranges(box);let ch=0;for(let k=1;k<3;k++)if(rg[k]>rg[ch])ch=k;const weight=box.reduce((n,c)=>n+c[3],0);const score=rg[ch]*Math.log2(weight+1);if(score>bscore){bscore=score;bi=i;bchannel=ch;}}
+  if(bi<0)break;
+  const box=boxes.splice(bi,1)[0].sort((a,b)=>a[bchannel]-b[bchannel]);const total=box.reduce((n,c)=>n+c[3],0);let acc=0,mid=1;for(let i=0;i<box.length-1;i++){acc+=box[i][3];if(acc>=total/2){mid=i+1;break;}}
+  boxes.push(box.slice(0,mid),box.slice(mid));
+ }
+ return boxes.map(box=>{let sums=[0,0,0],n=0;for(const c of box){for(let k=0;k<3;k++)sums[k]+=c[k]*c[3];n+=c[3];}return sums.map(v=>Math.round(v/Math.max(1,n)));});
+}
+function buildPalette(data,limit,algorithm,transparentSlot){
+ const map=new Map(), arr=data.data;
+ for(let p=0;p<arr.length/4;p++){const i=p*4;if(arr[i+3]===0)continue;const r=arr[i],g=arr[i+1],b=arr[i+2];let weight=1;
+  // For small lettering/logos, give high-contrast edge pixels extra representation in the palette.
+  if(algorithm==='logo4'){const x=p%width,y=Math.floor(p/width);let edge=0;for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const xx=x+dx,yy=y+dy;if(xx<0||xx>=width||yy<0||yy>=height)continue;const j=(yy*width+xx)*4;edge=Math.max(edge,Math.abs(r-arr[j])+Math.abs(g-arr[j+1])+Math.abs(b-arr[j+2]));}if(edge>100)weight=6;else if(edge>45)weight=3;}
+  const key=(r<<16)|(g<<8)|b;let v=map.get(key);if(v)v[3]+=weight;else map.set(key,[r,g,b,weight]);}
+ let colors=[...map.values()];if(colors.length<=limit)return colors.map(c=>c.slice(0,3));
+ if(algorithm==='popular'){colors.sort((a,b)=>b[3]-a[3]);return colors.slice(0,limit).map(c=>c.slice(0,3));}
+ let pal=medianCut(colors,limit);
+ // Weighted palette refinement (Lloyd iterations) lowers average color error.
+ for(let iter=0;iter<5;iter++){
+  const sums=pal.map(()=>[0,0,0,0]);
+  for(const c of colors){const j=nearestColor(c[0],c[1],c[2],pal),w=c[3],a=sums[j];a[0]+=c[0]*w;a[1]+=c[1]*w;a[2]+=c[2]*w;a[3]+=w;}
+  let changed=false;
+  for(let j=0;j<pal.length;j++)if(sums[j][3]){const next=[Math.round(sums[j][0]/sums[j][3]),Math.round(sums[j][1]/sums[j][3]),Math.round(sums[j][2]/sums[j][3])];if(next.some((v,k)=>v!==pal[j][k]))changed=true;pal[j]=next;}
+  if(!changed)break;
+ }
+ return pal;
+}
+function nearestColor(r,g,b,pal){let best=0,dist=Infinity;for(let i=0;i<pal.length;i++){const c=pal[i],dr=r-c[0],dg=g-c[1],db=b-c[2],d=dr*dr+dg*dg+db*db;if(d<dist){dist=d;best=i;}}return best;}
+function processImage(){
+ if(!originalData)return;
+ const mode=$('mode').value, max=+$('colors').value, dith=$('dither').value, alphaMode=$('alpha').value, thr=+$('threshold').value;
+ const src=new Uint8ClampedArray(originalData.data), count=width*height;
+ const result=new Uint8ClampedArray(src.length), alpha=new Uint8Array(count);
+ let pal=[];
+ if(mode==='indexed'){
+  const reserv=$('reserveTransparent').checked&&alphaMode==='preserve';
+  pal=buildPalette(originalData,Math.max(1,max-(reserv?1:0)),$('algorithm').value,reserv);
+  if(pal.length===0)pal=[[0,0,0]];
+ } else if(mode==='grayscale') pal=Array.from({length:max},(_,i)=>{const v=Math.round(i*255/(max-1||1));return [v,v,v];});
+ else pal=[[0,0,0],[255,255,255]];
+ const work=new Float32Array(src.length);
+ for(let i=0;i<src.length;i++)work[i]=src[i];
+ const mat=[[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]];
+ const bayer=[[0,8,2,10],[12,4,14,6],[3,11,1,9],[15,7,13,5]];
+ for(let y=0;y<height;y++){
+  for(let x=0;x<width;x++){
+   const p=y*width+x,i=p*4;
+   let r=work[i],g=work[i+1],b=work[i+2],a=src[i+3];
+   if(alphaMode==='white'&&a<255){const t=a/255;r=r*t+255*(1-t);g=g*t+255*(1-t);b=b*t+255*(1-t);a=255;}
+   if(alphaMode==='black'&&a<255){const t=a/255;r*=t;g*=t;b*=t;a=255;}
+   const transparent=(alphaMode==='preserve'&&a<128)||(alphaMode==='threshold'&&a<thr);
+   if(transparent){result[i]=result[i+1]=result[i+2]=0;result[i+3]=0;alpha[p]=0;continue;}
+   if(mode==='bitmap'){
+    const lum=0.299*r+0.587*g+0.114*b;const v=lum>=thr?255:0;result[i]=result[i+1]=result[i+2]=v;result[i+3]=255;alpha[p]=255;continue;
+   }
+   let idx;
+   if(mode==='grayscale'){
+    const lum=0.299*r+0.587*g+0.114*b;idx=Math.max(0,Math.min(pal.length-1,Math.round(lum*(pal.length-1)/255)));
+   }else{
+    let rr=r,gg=g,bb=b;
+    if(dith==='ordered'){const off=((bayer[y%4][x%4]/16)-0.5)*8;rr+=off;gg+=off;bb+=off;}
+    idx=nearestColor(rr,gg,bb,pal);
+   }
+   const c=pal[idx];result[i]=c[0];result[i+1]=c[1];result[i+2]=c[2];result[i+3]=255;alpha[p]=255;
+   if((dith==='fs'||dith==='fs-light')&&mode==='indexed'){
+    const strength=dith==='fs-light'?0.32:1;
+    const er=(r-c[0])*strength,eg=(g-c[1])*strength,eb=(b-c[2])*strength;
+    const spread=(xx,yy,f)=>{if(xx<0||xx>=width||yy<0||yy>=height)return;const j=(yy*width+xx)*4;if((alphaMode==='preserve'||alphaMode==='threshold')&&src[j+3]<thr)return;work[j]+=er*f;work[j+1]+=eg*f;work[j+2]+=eb*f;};
+    spread(x+1,y,7/16);spread(x-1,y+1,3/16);spread(x,y+1,5/16);spread(x+1,y+1,1/16);
+   }
+  }
+ }
+ processed=new ImageData(result,width,height);indexedPixels=new Uint8Array(count);alphaPixels=alpha;palette=pal;
+ // Recalculate exact indices for exported indexed PNG against the actual final pixels.
+ for(let p=0;p<count;p++){const i=p*4;if(result[i+3]===0){indexedPixels[p]=255;continue;}indexedPixels[p]=nearestColor(result[i],result[i+1],result[i+2],pal);}
+ rctx.putImageData(processed,0,0);
+ $('resultDim').textContent=`${width} × ${height}`;
+ $('stats').innerHTML=`<span class="pill">Mode: ${mode}</span><span class="pill">Warna palet: ${pal.length}</span><span class="pill">Ukuran: ${width} × ${height}</span><span class="pill">Dithering: ${dith}</span>`;
+ $('status').textContent='Selesai. Periksa pratinjau sebelum mengekspor.';
+ ['downloadPng','downloadBmp','downloadBmp4','downloadBmp1','downloadPreview'].forEach(id=>$(id).disabled=false);
+}
+$('process').addEventListener('click',()=>{try{$('status').textContent='Memproses…';setTimeout(processImage,20);}catch(e){$('status').textContent='Kesalahan: '+e.message;}});
+function downloadBlob(blob,name){
+ if(window.Android && typeof window.Android.saveFile==='function'){
+  const reader=new FileReader();
+  reader.onload=()=>{try{window.Android.saveFile(name,String(reader.result).split(',')[1]||'');}catch(e){const a=document.createElement('a');const u=URL.createObjectURL(blob);a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1500);}};
+  reader.readAsDataURL(blob); return;
+ }
+ const a=document.createElement('a');const u=URL.createObjectURL(blob);a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1500);
+}
+function pngChunk(type,data){const bytes=new Uint8Array(4+data.length);for(let i=0;i<4;i++)bytes[i]=type.charCodeAt(i);bytes.set(data,4);const out=new Uint8Array(4+bytes.length+4);write32(out,0,data.length);out.set(bytes,4);write32(out,4+bytes.length,crc32(bytes));return out;}
+function write32(a,p,v){a[p]=(v>>>24)&255;a[p+1]=(v>>>16)&255;a[p+2]=(v>>>8)&255;a[p+3]=v&255;}
+function crc32(data){let c=-1;for(let i=0;i<data.length;i++){c^=data[i];for(let k=0;k<8;k++)c=(c>>>1)^((c&1)?0xedb88320:0);}return (c^-1)>>>0;}
+async function exportIndexedPNG(){
+ if(!processed)return;
+ if(!('CompressionStream' in window)){throw new Error('Browser ini tidak mendukung ekspor PNG berpalet langsung. Gunakan Ekspor PNG kompatibel.');}
+ const hasAlpha=alphaPixels.some(v=>v===0), pal=palette.slice(0,256);
+ const transparent=$('alpha').value==='preserve'||$('alpha').value==='threshold';
+ const reserve=$('reserveTransparent').checked&&transparent;
+ const table=reserve?[[0,0,0],...pal].slice(0,256):pal.slice(0,256);
+ const indexMap=new Uint8Array(width*height);
+ for(let p=0;p<indexMap.length;p++){if(alphaPixels[p]===0&&reserve){indexMap[p]=0;continue;}const i=p*4;let idx=nearestColor(processed.data[i],processed.data[i+1],processed.data[i+2],pal);indexMap[p]=Math.min(255,idx+(reserve?1:0));}
+ const scan=new Uint8Array(height*(width+1));for(let y=0;y<height;y++){const row=y*(width+1);scan[row]=0;scan.set(indexMap.subarray(y*width,(y+1)*width),row+1);}
+ const cs=new CompressionStream('deflate');const writer=cs.writable.getWriter();writer.write(scan);writer.close();const compressed=new Uint8Array(await new Response(cs.readable).arrayBuffer());
+ const ihdr=new Uint8Array(13);write32(ihdr,0,width);write32(ihdr,4,height);ihdr[8]=8;ihdr[9]=3;ihdr[10]=0;ihdr[11]=0;ihdr[12]=0;
+ const plte=new Uint8Array(table.length*3);table.forEach((c,i)=>{plte[i*3]=c[0];plte[i*3+1]=c[1];plte[i*3+2]=c[2];});
+ const chunks=[pngChunk('IHDR',ihdr),pngChunk('PLTE',plte)];
+ if(reserve){const trns=new Uint8Array(table.length);trns.fill(255);trns[0]=0;chunks.push(pngChunk('tRNS',trns));}
+ chunks.push(pngChunk('IDAT',compressed),pngChunk('IEND',new Uint8Array()));
+ const sig=new Uint8Array([137,80,78,71,13,10,26,10]);let total=8;for(const c of chunks)total+=c.length;const outb=new Uint8Array(total);outb.set(sig);let pos=8;for(const c of chunks){outb.set(c,pos);pos+=c.length;}
+ downloadBlob(new Blob([outb],{type:'image/png'}),sourceName+'_indexed.png');
+}
+function exportBMP(bits){
+ if(!processed)return;
+ const pal=bits===1?[[0,0,0],[255,255,255]]:palette.slice(0,bits===4?16:256), n=pal.length;
+ const rowBytes=bits===1?Math.ceil(width/8):(bits===4?Math.ceil(width/2):width), stride=Math.ceil(rowBytes/4)*4, offset=14+40+n*4, size=offset+stride*height;
+ const buf=new ArrayBuffer(size),v=new DataView(buf),u=new Uint8Array(buf);
+ u[0]=66;u[1]=77;v.setUint32(2,size,true);v.setUint32(10,offset,true);v.setUint32(14,40,true);v.setInt32(18,width,true);v.setInt32(22,height,true);v.setUint16(26,1,true);v.setUint16(28,bits,true);v.setUint32(34,stride*height,true);v.setUint32(46,n,true);
+ for(let i=0;i<n;i++){const p=54+i*4;u[p]=pal[i][2];u[p+1]=pal[i][1];u[p+2]=pal[i][0];u[p+3]=0;}
+ for(let y=0;y<height;y++){const dst=offset+(height-1-y)*stride;for(let x=0;x<width;x++){const p=(y*width+x)*4;if(bits===1){const lum=0.299*processed.data[p]+0.587*processed.data[p+1]+0.114*processed.data[p+2];if(lum>=+$('threshold').value)u[dst+(x>>3)]|=1<<(7-(x&7));}else{const idx=processed.data[p+3]===0?0:nearestColor(processed.data[p],processed.data[p+1],processed.data[p+2],pal);if(bits===4){const q=dst+(x>>1);if((x&1)===0)u[q]|=(idx&15)<<4;else u[q]|=idx&15;}else u[dst+x]=idx;}}}
+ downloadBlob(new Blob([buf],{type:'image/bmp'}),sourceName+(bits===1?'_bitmap1bit.bmp':bits===4?'_indexed4bit_16colors.bmp':'_indexed8bit.bmp'));
+}
+$('downloadPng').addEventListener('click',async()=>{try{$('status').textContent='Menyusun indexed PNG…';await exportIndexedPNG();$('status').textContent='Indexed PNG selesai diekspor.';}catch(e){$('status').textContent='Ekspor indexed PNG gagal: '+e.message;}});
+$('downloadBmp').addEventListener('click',()=>{try{exportBMP(8);$('status').textContent='BMP 8-bit selesai diekspor.';}catch(e){$('status').textContent='Ekspor BMP gagal: '+e.message;}});
+$('downloadBmp4').addEventListener('click',()=>{try{if(palette.length>16)throw new Error('Proses ulang dengan jumlah warna 16 terlebih dahulu.');exportBMP(4);$('status').textContent='BMP 4-bit (16 warna) selesai diekspor. Catatan: BMP 4-bit standar tidak menyimpan transparansi alpha.';}catch(e){$('status').textContent='Ekspor BMP 4-bit gagal: '+e.message;}});
+$('downloadBmp1').addEventListener('click',()=>{try{exportBMP(1);$('status').textContent='BMP bitmap 1-bit selesai diekspor.';}catch(e){$('status').textContent='Ekspor bitmap gagal: '+e.message;}});
+$('downloadPreview').addEventListener('click',()=>{out.toBlob(blob=>{if(blob)downloadBlob(blob,sourceName+'_reduced_rgba.png');},'image/png');});
+
+ // Interactive contextual guide: guide buttons explain options and optionally sync the matching control.
+ const guideText = {
+  size: {
+   32:'32×32: tekstur sangat kecil. Cocok untuk ikon sederhana, tetapi logo, teks, dan garis tipis mudah kehilangan detail. Pertahankan ukuran ini hanya bila slot sumber memang 32×32.',
+   64:'64×64: masih kecil, tetapi memberi lebih banyak piksel untuk logo sederhana. Garis tipis dan tulisan kecil tetap perlu diuji.',
+   128:'128×128: dapat menampung detail lebih banyak, jika slot tekstur game mendukung ukuran ini.',
+   256:'256×256: cocok untuk aset yang lebih rinci bila ukuran tersebut sesuai dengan tekstur sumber.',
+   512:'512×512: sering berguna sebagai master gambar, tetapi jangan mengganti slot kecil dengan ukuran ini tanpa memastikan game mendukungnya.',
+   1024:'1024×1024: tekstur besar. Gunakan hanya bila format/slot game memang memakai ukuran tersebut.',
+   2048:'2048×2048: sangat besar untuk banyak ikon UI. Ukuran besar tidak otomatis memperbaiki tekstur yang salah format.'
+  },
+  bpp: {
+   4:'4 bpp: biasanya palet 4-bit dengan maksimal 16 indeks warna. Untuk logo sederhana, coba 16 warna dan dithering Off. File target tetap harus memakai format dan palet yang diharapkan game.',
+   8:'8 bpp: biasanya palet 8-bit dengan maksimal 256 indeks warna. Lebih fleksibel untuk logo kompleks atau gradasi bila target mendukungnya.',
+   16:'16 bpp: sering merujuk pada warna langsung seperti RGB 5-6-5 atau 5-5-5-1, bukan 16 warna palet. Periksa spesifikasi format target.',
+   24:'24 bpp: sering berarti RGB langsung tanpa alpha terpisah. Ini bukan palet 24 warna.',
+   32:'32 bpp: sering berarti RGBA atau format warna langsung lain. Kanal alpha dan susunan kanal bergantung format.'
+  },
+  colors: {
+   16:'16 warna: palet sangat terbatas. Dapat sesuai untuk target 4 bpp, tetapi gradasi, bayangan, garis, dan detail kecil bisa hilang.',
+   32:'32 warna: kompromi untuk aset sederhana; umumnya memerlukan setidaknya 6 bit untuk indeks palet, sedangkan format target bisa memiliki aturan lain.',
+   64:'64 warna: memberi ruang warna lebih banyak daripada 16/32, jika format target mendukung kapasitas tersebut.',
+   128:'128 warna: dapat mempertahankan detail warna lebih baik, tetapi harus sesuai dengan kedalaman indeks yang didukung target.',
+   256:'256 warna: jumlah umum untuk palet 8-bit. Tidak cocok jika tekstur target hanya mendukung palet 4-bit.'
+  },
+  dither: {
+   none:'Tanpa dithering: titik awal yang disarankan untuk logo, teks, lambang, dan ikon datar. Tepi biasanya lebih bersih, tetapi gradasi bisa terlihat bertingkat.',
+   'fs-light':'Floyd–Steinberg ringan: menyebarkan sebagian kecil kesalahan warna. Coba untuk gradasi ringan; periksa agar tidak muncul bintik pada logo kecil.',
+   ordered:'Ordered: pola titik teratur. Bisa menyamarkan gradasi, tetapi pola kotak dapat terlihat pada ukuran kecil.',
+   fs:'Floyd–Steinberg penuh: menyebarkan kesalahan warna ke piksel tetangga. Bisa membantu foto, namun dapat membuat logo/teks kecil tampak berbintik.'
+  }
+ };
+ function showGuide(type,val){
+  const out=document.getElementById('guideOutput');
+  out.innerHTML='<b>'+({size:'Resolusi ',bpp:'Bitmap ',colors:'Reduce Colours ',dither:'Dithering '})[type]+val+(type==='size'?'×'+val:type==='bpp'?' bpp':type==='colors'?' warna':'')+':</b> '+guideText[type][val];
+  document.querySelectorAll('#guide'+({size:'Sizes',bpp:'Bpp',colors:'Colors',dither:'Dither'})[type]+' button').forEach(b=>b.classList.toggle('active',b.dataset[type]===String(val)));
+ }
+ document.querySelectorAll('#guideSizes button').forEach(b=>b.addEventListener('click',()=>{
+  const v=b.dataset.size;showGuide('size',v);
+  $('maxdim').value='custom';$('targetWidth').value=v;$('targetHeight').value=v;$('targetWidth').dataset.userEdited='1';$('targetHeight').dataset.userEdited='1';$('resizeMode').value='exact';if(sourceImage)applyResize();
+ }));
+ document.querySelectorAll('#guideBpp button').forEach(b=>b.addEventListener('click',()=>{
+  const v=b.dataset.bpp;showGuide('bpp',v);
+  if(v==='4'){$('mode').value='indexed';$('colors').value='16';$('mode').dispatchEvent(new Event('change'));}
+  else if(v==='8'){$('mode').value='indexed';$('colors').value='256';$('mode').dispatchEvent(new Event('change'));}
+ }));
+ document.querySelectorAll('#guideColors button').forEach(b=>b.addEventListener('click',()=>{
+  const v=b.dataset.colors;showGuide('colors',v);
+  $('mode').value='indexed';$('colors').value=v;$('mode').dispatchEvent(new Event('change'));
+ }));
+ document.querySelectorAll('#guideDither button').forEach(b=>b.addEventListener('click',()=>{
+  const v=b.dataset.dither;showGuide('dither',v);$('dither').value=v;
+ }));
+
+})();
+
+// Penjelasan langsung untuk SETIAP opsi dropdown: teks berubah saat pilihan diganti.
+const choiceDescriptions = {
+ maxdim: {
+  '0':'Mempertahankan ukuran asli gambar. Pilih jika ukuran sumber sudah sesuai dengan kebutuhan tekstur.',
+  '2048':'Membatasi sisi terpanjang hasil menjadi maksimal 2048 piksel. Cocok untuk tekstur besar; ukuran gambar yang lebih kecil tidak diperbesar.',
+  '1024':'Membatasi sisi terpanjang menjadi maksimal 1024 piksel. Pilihan menengah untuk tekstur yang tidak membutuhkan resolusi sangat besar.',
+  '512':'Membatasi sisi terpanjang menjadi maksimal 512 piksel. Cocok untuk banyak logo atau tekstur UI berukuran sedang.',
+  'custom':'Memakai lebar dan tinggi khusus yang Anda masukkan. Pilih ini jika Anda perlu ukuran pasti, misalnya 32×32 atau 128×128.'
+ },
+ resizeMode: {
+  exact:'Ukuran tepat: hasil dipaksa mengikuti lebar × tinggi yang diisi. Jika rasio berbeda, gambar bisa tampak melebar atau gepeng.',
+  fit:'Pertahankan rasio aspek: gambar masuk ke dalam ukuran target tanpa berubah bentuk. Sisi kosong mungkin tersisa jika rasio target berbeda.'
+ },
+ mode: {
+  indexed:'Indexed color (palet): setiap piksel menunjuk ke warna dalam palet. Gunakan untuk workflow tekstur berpalet, tetapi format ekspor belum tentu sama dengan format internal PES.',
+  grayscale:'Grayscale: mengubah gambar menjadi tingkat abu-abu. Gunakan hanya jika tekstur memang perlu hitam-putih/abu-abu.',
+  bitmap:'Bitmap hitam-putih 1-bit: hanya dua keadaan, hitam dan putih. Cocok untuk mask atau gambar kontras tinggi, bukan logo berwarna.'
+ },
+ colors: {
+  '2':'2 warna: paling terbatas, cocok untuk bentuk hitam-putih sederhana. Banyak detail dan gradasi akan hilang.',
+  '4':'4 warna: untuk ikon sangat sederhana dengan sedikit warna datar. Risiko hilangnya detail lebih tinggi.',
+  '8':'8 warna: masih sangat terbatas, tetapi dapat mewakili beberapa warna utama pada ikon sederhana.',
+  '16':'16 warna: batas umum untuk palet 4-bit. Titik awal yang baik untuk logo sederhana jika tekstur target memang 4 bpp.',
+  '32':'32 warna: lebih banyak variasi daripada 16 warna. Pastikan format target mendukung setidaknya 32 warna palet.',
+  '64':'64 warna: berguna untuk gambar dengan lebih banyak bayangan. Tidak sesuai untuk target palet 4-bit yang hanya memuat 16 indeks warna.',
+  '128':'128 warna: mempertahankan variasi lebih banyak, tetapi perlu dukungan format target yang sesuai.',
+  '256':'256 warna: batas umum palet 8-bit. Cocok untuk gambar berwarna kompleks jika target mendukung palet hingga 256 warna.'
+ },
+ dither: {
+  none:'Tanpa dithering: warna dipetakan langsung ke warna palet terdekat. Biasanya terbaik untuk logo, lambang, ikon, dan teks dengan tepi tajam.',
+  'fs-light':'Floyd–Steinberg ringan: menyebarkan sebagian kesalahan warna untuk melembutkan gradasi. Coba untuk gradasi ringan; periksa bintik pada detail kecil.',
+  ordered:'Ordered 4×4 halus: memakai pola teratur untuk menyimulasikan warna tambahan. Pola bisa terlihat pada area datar, terutama jika gambar kecil.',
+  fs:'Floyd–Steinberg penuh: menyebarkan kesalahan warna ke piksel tetangga dengan lebih kuat. Sering membantu foto/gradasi, tetapi dapat membuat logo dan teks kecil berbintik.'
+ },
+ alpha: {
+  preserve:'Pertahankan transparansi: mencoba menjaga kanal alpha sumber. Pilih jika logo memiliki latar transparan; pastikan format ekspor/target mendukungnya.',
+  threshold:'Transparan jika alpha di bawah ambang: piksel yang lebih transparan dari batas akan dijadikan transparan, sedangkan sisanya dianggap terlihat. Berguna untuk merapikan tepi, tetapi bisa menghilangkan piksel semi-transparan.',
+  white:'Gabungkan ke latar putih: semua transparansi dicampur dengan putih. Gunakan jika tekstur memang harus berlatar putih; jangan gunakan untuk logo yang perlu transparan.',
+  black:'Gabungkan ke latar hitam: semua transparansi dicampur dengan hitam. Gunakan jika latar hitam memang diinginkan; dapat meninggalkan pinggiran gelap jika latar target berbeda.'
+ },
+ algorithm: {
+  median:'Median Cut berbobot + penyempurnaan palet: membagi warna gambar menjadi kelompok dan menyempurnakan palet. Pilihan umum yang seimbang untuk beragam gambar.',
+  popular:'Warna paling sering muncul: memprioritaskan warna yang paling banyak digunakan. Cocok untuk gambar dengan warna datar dominan, tetapi warna langka pada tulisan/garis bisa terabaikan.',
+  logo4:'Logo/tulisan kecil (prioritas tepi): memberi bobot lebih besar pada piksel yang kontras agar garis dan huruf kecil lebih terwakili. Coba untuk lambang dan logo, lalu periksa hasilnya.'
+ }
+};
+function updateChoiceHelp(id){
+ const select=document.getElementById(id), help=document.getElementById('help-'+id);
+ if(!select||!help)return;
+ const desc=choiceDescriptions[id]?.[select.value] || 'Pilihan ini tidak memiliki penjelasan khusus.';
+ const label=select.options[select.selectedIndex]?.text || select.value;
+ help.innerHTML='<strong>Pilihan saat ini — '+label+':</strong> '+desc;
+}
+Object.keys(choiceDescriptions).forEach(id=>{
+ const el=document.getElementById(id);
+ if(el){updateChoiceHelp(id);el.addEventListener('change',()=>updateChoiceHelp(id));}
+});
+
+</script>
+</body>
+</html>
